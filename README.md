@@ -71,7 +71,7 @@ Third, we will work on another branch to work with ellipses.
  ## Instructions Part 1: Intro to Processing
  
 - Identify what settings, setup, and draw do. 
-- 
+- Identify what the parameters to fill, rect, and ellipse do.
  
  ## Instructions Part 2: Create a branch, feature-rect
  
