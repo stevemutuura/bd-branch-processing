@@ -1,4 +1,4 @@
-#Introduction to Graphical Programming with Processing
+# Introduction to Graphical Programming with Processing
 
 Processing is a Java library that will allow us to create simple 
 graphics to accompany our fundamentals of Java coding. 
