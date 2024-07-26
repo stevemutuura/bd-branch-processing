@@ -61,6 +61,11 @@ public class Main extends PApplet {
      * Draw a few ellipses, each with different colors at different parts of the screen.
      */
     public void drawEllipses() {
+        //Choose a color with fill
+        fill(100.0f, 150.0f, 80.0f);
+
+        //Draw an ellipse
+        ellipse(width / 2, height / 2, width-50, height-50);
 
     }
 
