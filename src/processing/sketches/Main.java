@@ -4,6 +4,9 @@ import processing.core.PApplet;
 
 public class Main extends PApplet {
 
+    float angle = 0;
+    float squareSize;
+
     public void settings() {
         size(600, 600);
     }
@@ -12,21 +15,50 @@ public class Main extends PApplet {
         // Sets the color mode to HSB, 360 being the max Hue,
         // 100 the max Saturation, and 100 the max Brightness
         colorMode(HSB, 360, 100, 100);
+        squareSize = (width - 50) * sqrt(2) / 2;
+        rectMode(CENTER);
     }
 
     public void draw() {
         // Recreates the background to be black each 'draw'
         background(0, 0, 0);
 
-        // Look at the code in this method for some sample uses of rect and ellipse
-        drawSamples();
-
         // Create a branch to allow you to work on the new feature of rectangles
         drawRectangles();
 
         // Create a branch to allow you to work on the new feature of ellipses
-        drawEllipses();
+        drawGreenCircle();
 
+        // Look at the code in this method for some sample uses of rect and ellipse
+        //drawSamples();
+
+        //Add the rotating square inside the existing circle
+        drawRotatingSquare();
+    }
+
+    /**
+     * Draw a rotating square that touches the sides of the existing ellipse
+     * which itself touches the sides of the inner square.
+     */
+    public void drawRotatingSquare() {
+        //Calculate the rotating angle
+        angle += radians(1);
+
+        //Push and pop matrix to isolate transformation
+        pushMatrix();
+
+        //Translate to the center of the circle
+        translate(width / 2, height / 2);
+
+        //Rotate by the current angle
+        rotate(angle);
+
+        //Draw the square
+        stroke(0, 0, 100);
+        fill(70.0f, 80.0f, 80.0F);
+        rect(0, 0, squareSize, squareSize);
+
+        popMatrix();
     }
 
     public void drawSamples() {
@@ -45,22 +77,22 @@ public class Main extends PApplet {
      */
     public void drawRectangles() {
         //Choose a color with fill
-        fill(200.0f, 88.0f, 30.0f);
+        fill(20.0f, 88.0f, 30.0f);
 
         //Draw a rectangle.
-        rect(0, 0, width, height);
+        rect(0, 0, 600, 600);
 
         //Choose a color for second rectangle with fill
-        fill(700.0f, 120.0f, 70.0f);
+        fill(650.0f, 100.0f, 100.0f);
 
         //Draws second rectangle
-        rect(25, 25, width - 50, height -50);
+        rect(25, 25, width -50 , width - 50);
     }
 
     /**
      * Draw a few ellipses, each with different colors at different parts of the screen.
      */
-    public void drawEllipses() {
+    public void drawGreenCircle() {
         //Choose a color with fill
         fill(100.0f, 150.0f, 80.0f);
 
