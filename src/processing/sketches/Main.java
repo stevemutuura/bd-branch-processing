@@ -5,7 +5,10 @@ import processing.core.PApplet;
 public class Main extends PApplet {
 
     float angle = 0;
+    float reverseAngle = 0;
     float squareSize;
+    float circleSize;
+    float innerSquareSize;
 
     public void settings() {
         size(600, 600);
@@ -16,24 +19,29 @@ public class Main extends PApplet {
         // 100 the max Saturation, and 100 the max Brightness
         colorMode(HSB, 360, 100, 100);
         squareSize = (width - 50) * sqrt(2) / 2;
+        circleSize = squareSize;
+        innerSquareSize = circleSize * sqrt(2) / 2;
         rectMode(CENTER);
     }
 
     public void draw() {
         // Recreates the background to be black each 'draw'
-        background(0, 0, 0);
+        background(93, 0, 0);
 
-        // Create a branch to allow you to work on the new feature of rectangles
+        //Look at the code in this method for some sample uses of rect and ellipse
         drawRectangles();
 
         // Create a branch to allow you to work on the new feature of ellipses
         drawGreenCircle();
 
-        // Look at the code in this method for some sample uses of rect and ellipse
-        //drawSamples();
-
         //Add the rotating square inside the existing circle
         drawRotatingSquare();
+
+        // Draw the navy blue circle inside the rotating square
+        drawWhiteStripe();
+
+        // Draw the reverse rotating blue square inside the white stripe
+        drawReverseRotatingBlueSquare();
     }
 
     /**
@@ -54,39 +62,29 @@ public class Main extends PApplet {
         rotate(angle);
 
         //Draw the square
-        stroke(0, 0, 100);
+        stroke(78.0f, 80.0f, 80.0f);
         fill(70.0f, 80.0f, 80.0F);
         rect(0, 0, squareSize, squareSize);
 
         popMatrix();
     }
 
-    public void drawSamples() {
-        // Fill changes the color to shade in the following drawn shapes
-        fill(300.0f, 80.0f, 85.0f);
-        // Rect draws a rect with the given parameters
-        rect(100, 100, 400, 400);
-
-        fill(100.0f, 100.0f, 100.0f);
-        // Ellipse draws an ellipse with the given parameters
-        ellipse(300, 150, 200, 100);
-    }
-
     /**
-     * Draw a few rectangles, each with different colors at different parts of the screen.
+     * Draw the navy blue circle inside the rotating square.
      */
-    public void drawRectangles() {
-        //Choose a color with fill
-        fill(20.0f, 88.0f, 30.0f);
+    public void drawWhiteStripe() {
+        //Push and pop matrix to isolate transformations
+        pushMatrix();
 
-        //Draw a rectangle.
-        rect(0, 0, 600, 600);
+        //Translate to the center of the circle
+        translate(width / 2, height / 2);
 
-        //Choose a color for second rectangle with fill
-        fill(650.0f, 100.0f, 100.0f);
+        // Draw the navy blue circle
+        noFill();
+        stroke(48, 12, 100);
+        ellipse(0, 0, circleSize, circleSize);
 
-        //Draws second rectangle
-        rect(25, 25, width -50 , width - 50);
+        popMatrix();
     }
 
     /**
@@ -99,6 +97,38 @@ public class Main extends PApplet {
         //Draw an ellipse
         ellipse(width / 2, height / 2, width-50, height-50);
 
+    }
+
+    public void drawRectangles() {
+        //Draw a red square at (0, 0) with 25% width and height
+        fill(0, 100, 100); //Red color in HSB
+        noStroke();
+        rect(0, 0, width + 0.25f, height + 0.25f);
+    }
+
+    /**
+     * Draw a blue square that rotates in the opposite direction (anticlockwise)
+     * inside the white stripe, touching its sides.
+     */
+    public void drawReverseRotatingBlueSquare() {
+        // Calculate the reverse rotation angle
+        reverseAngle -= radians(2);
+
+        //Push and pop matrix to isolate transformations
+        pushMatrix();
+
+        //Translate to the center of the circle
+        translate(width / 2, height / 2);
+
+        //Rotate by the reverse angle
+        rotate(reverseAngle);
+
+        //Draw the blue square
+        stroke(197, 92, 46);
+        noFill();
+        rect(0, 0, innerSquareSize, innerSquareSize);
+
+        popMatrix();
     }
 
     public static void main(String[] args) {
