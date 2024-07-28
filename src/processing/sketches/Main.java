@@ -91,8 +91,8 @@ public class Main extends PApplet {
         rotate(angle);
 
         //Draw the square
-        stroke(60.0f, 96.3f, 96.43f);
-        fill(60.0f, 96.3f, 96.3f);
+        stroke((60 + hueShift) % 360, 100, 100);
+        fill((60 + hueShift) % 360, 80, 80);
         rect(0, 0, squareSize, squareSize);
 
         popMatrix();
