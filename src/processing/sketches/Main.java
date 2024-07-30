@@ -2,8 +2,12 @@ package processing.sketches;
 
 import processing.core.PApplet;
 
+//import controlP5.*;  To add a few sliders/buttons for increasing rotation speeds and hue incrementing cycles
+
+
 public class Main extends PApplet {
 
+    //ControlP5 cp5;
     float angle = 0;
     float reverseAngle = 0;
     float thirdReverseAngle = 0;
@@ -18,6 +22,15 @@ public class Main extends PApplet {
     float fourthCircleSize;
     float fourthSquareSize;
     float hueShift = 0;
+    float saturationShift = 100;
+    float brightnessShift = 100;
+    boolean darkening = true;
+    float baseHue = 0;
+    //float colorIncrement = 0.2f;
+    //float rotationSpeedMultiplier1 = 1;
+    //float rotationSpeedMultiplier2 = 1;
+    //float rotationSpeedMultiplier3 = 1;
+    //float rotationSpeedMultiplier4 = 1;
 
 
     public void settings() {
@@ -38,6 +51,8 @@ public class Main extends PApplet {
         fourthCircleSize = thirdSquareSize * sqrt(2) / 2;
         fourthSquareSize = fourthCircleSize * sqrt(2) / 2;
         rectMode(CENTER);
+
+        //cp5 = new ControlP5(this);
     }
 
     public void draw() {
@@ -45,31 +60,55 @@ public class Main extends PApplet {
         background(93, 0, 0);
 
         // Increment hue shift
-        hueShift = (hueShift + 0.5f) % 360;
+        //hueShift = (hueShift + 100.5f) % 360;
 
-        // Create a branch to allow you to work on the new feature of ellipses
-        drawGreenCircle();
+        // Handle color transition
+        if (darkening) {
+            saturationShift -= 0.2f;
+            brightnessShift -= 0.2f;
+            if (brightnessShift <= 20) {
+                darkening = false;
+            }
+        } else {
+            saturationShift += 0.2f;
+            brightnessShift += 0.2f;
+            if (brightnessShift >= 100) {
+                darkening = true;
+                baseHue = (baseHue + 20) % 360;
+            }
+        }
 
-        //Add the rotating square inside the existing circle
-        drawRotatingSquare();
+        drawFirstCircle();
 
-        // Draw the navy blue circle inside the rotating square
-        drawBlueStripe();
+        drawFirstRotatingSquare();
 
-        // Draw the reverse rotating blue square inside the white stripe
-        drawReverseRotatingBlueSquare();
+        drawSecondCircle();
 
-        // Draw the red circle inside the blue square
-        drawRedCircle();
+        drawSecondRotatingSquare();
 
-        //Draw rotating red square inside the red circle
-        drawRotatingRedSquare();
+        drawThirdCircle();
 
-        // Draw the fourth blue circle inside the rotating red square
-        drawFourthBlueCircle();
+        drawThirdRotatingSquare();
 
-        // Draw the final blue square rotating on the circumference of the fourth blue square
-        drawRotatingBlueSquare();
+        drawFourthCircle();
+
+        drawFourthRotatingSquare();
+    }
+
+    /**
+     * Method to get color based on current shifts.
+     */
+    public int getColor(float hue, float saturation, float brightness) {
+        return color((baseHue + hue) % 360, constrain(saturation, 0, 100), constrain(brightness, 0, 100));
+    }
+
+    public void drawFirstCircle() {
+        //Choose a color with fill
+        fill(getColor(0, saturationShift, brightnessShift));
+        noStroke();
+
+        //Draw an ellipse
+        ellipse(width / 2, height / 2, width-50, height-50);
 
     }
 
@@ -77,11 +116,11 @@ public class Main extends PApplet {
      * Draw a rotating square that touches the sides of the existing ellipse
      * which itself touches the sides of the inner square.
      */
-    public void drawRotatingSquare() {
+    public void drawFirstRotatingSquare() {
         //Calculate the rotating angle
         angle += radians(1);
 
-        //Push and pop matrix to isolate transformation
+        //Push and pop matrix to isolate
         pushMatrix();
 
         //Translate to the center of the circle
@@ -91,17 +130,14 @@ public class Main extends PApplet {
         rotate(angle);
 
         //Draw the square
-        stroke((60 + hueShift) % 360, 100, 100);
-        fill((60 + hueShift) % 360, 80, 80);
+        stroke(getColor(10, saturationShift, brightnessShift));
+        fill(getColor(10, saturationShift, brightnessShift));
         rect(0, 0, squareSize, squareSize);
 
         popMatrix();
     }
 
-    /**
-     * Draw the navy blue circle inside the rotating square.
-     */
-    public void drawBlueStripe() {
+    public void drawSecondCircle() {
         //Push and pop matrix to isolate transformations
         pushMatrix();
 
@@ -109,31 +145,15 @@ public class Main extends PApplet {
         translate(width / 2, height / 2);
 
         // Draw the navy blue circle
-        noFill();
-        stroke((197 + hueShift) % 360, 100, 100);
+        //noFill();
+        fill(getColor(20, saturationShift, brightnessShift));
+        stroke(getColor(20, saturationShift, brightnessShift));
         ellipse(0, 0, circleSize, circleSize);
 
         popMatrix();
     }
 
-    /**
-     * Draw a few ellipses, each with different colors at different parts of the screen.
-     */
-    public void drawGreenCircle() {
-        //Choose a color with fill
-        fill((120 + hueShift) % 360, 100, 80);
-        noStroke();
-
-        //Draw an ellipse
-        ellipse(width / 2, height / 2, width-50, height-50);
-
-    }
-
-    /**
-     * Draw a blue square that rotates in the opposite direction (anticlockwise)
-     * inside the white stripe, touching its sides.
-     */
-    public void drawReverseRotatingBlueSquare() {
+    public void drawSecondRotatingSquare() {
         // Calculate the reverse rotation angle
         reverseAngle -= radians(2);
 
@@ -147,17 +167,14 @@ public class Main extends PApplet {
         rotate(reverseAngle);
 
         //Draw the blue square
-        stroke((240 + hueShift) % 360, 100, 100);
-        noFill();
+        stroke(getColor(30, saturationShift, brightnessShift));
+        fill(getColor(30, saturationShift, brightnessShift));
         rect(0, 0, innerSquareSize, innerSquareSize);
 
         popMatrix();
     }
 
-    /**
-     * Draw the red circle inside the blue square.
-     */
-    public void drawRedCircle() {
+    public void drawThirdCircle() {
         // Push and pop matrix to isolate transformation
         pushMatrix();
 
@@ -165,17 +182,15 @@ public class Main extends PApplet {
         translate(width / 2, height / 2);
 
         // Draw the red circle
-        noFill();
-        stroke((0 + hueShift) % 360, 100, 100);
+        //noFill();
+        stroke(getColor(40, saturationShift, brightnessShift));
+        fill(getColor(40, saturationShift, brightnessShift));
         ellipse(0, 0, newCircleSize * sqrt(2), newCircleSize * sqrt(2));
 
         popMatrix();
     }
 
-    /**
-     * Draw the rotating red square inside the red circle.
-     */
-    public void drawRotatingRedSquare() {
+    public void drawThirdRotatingSquare() {
         // Calculate the third reverse rotation angle
         thirdReverseAngle += radians(4);
 
@@ -189,17 +204,14 @@ public class Main extends PApplet {
         rotate(thirdReverseAngle);
 
         // Draw the red square
-        stroke((0 + hueShift) % 360, 100, 100);
-        noFill();
+        stroke(getColor(50, brightnessShift, saturationShift));
+        fill(getColor(50, brightnessShift, brightnessShift));
         rect(0, 0, newSquareSize * sqrt(2), newSquareSize * sqrt(2));
 
         popMatrix();
     }
 
-    /**
-     * Draw the fourth blue circle inside the rotating red square.
-     */
-    public void drawFourthBlueCircle() {
+    public void drawFourthCircle() {
         // Push and pop matrix to isolate transformations
         pushMatrix();
 
@@ -207,17 +219,15 @@ public class Main extends PApplet {
         translate(width / 2, height / 2);
 
         // Draw the fourth blue circle
-        noFill();
-        stroke((240 + hueShift) % 360, 100, 100);
+        //noFill();
+        stroke(getColor(60, saturationShift, brightnessShift));
+        fill(getColor(60, saturationShift, brightnessShift));
         ellipse(0, 0, newSquareSize * sqrt(2), newSquareSize * sqrt(2));
 
         popMatrix();
     }
 
-    /**
-     * Draw the new rotating blue square inside the new blue circle.
-     */
-    public void drawRotatingBlueSquare() {
+    public void drawFourthRotatingSquare() {
         // Calculate the fourth reverse angle
         fourthReverseAngle -= radians(8);
 
@@ -231,8 +241,8 @@ public class Main extends PApplet {
         rotate(fourthReverseAngle);
 
         //Draw the new blue square
-        stroke((240 + hueShift) % 360, 100, 100);
-        noFill();
+        stroke(getColor(70, saturationShift, brightnessShift));
+        fill(getColor(70, saturationShift, brightnessShift));
         rect(0, 0, newSquareSize, newSquareSize);
 
         popMatrix();
