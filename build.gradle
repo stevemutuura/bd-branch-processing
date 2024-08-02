@@ -85,6 +85,9 @@ dependencies {
     implementation files("$rootDir/LibrariesAndUtilities/ATAResources.jar")
     implementation files("$rootDir/LibrariesAndUtilities/core-3.3.7.jar")
     implementation project('LibrariesAndUtilities:LessonPlanResources')
+
+//    implementation 'org.jogamp.jpgl-all-main:2.3.2'
+//    implementation 'org.jopamp.gluegen:gluegen-rt-main:2.3.2'
 }
 
 test {
