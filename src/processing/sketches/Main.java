@@ -53,14 +53,14 @@ public class Main extends PApplet {
         }
 
         if (darkening) {
-            saturationShift -= 50.2f;
-            brightnessShift -= 50.2f;
+            saturationShift -= 5.2f;
+            brightnessShift -= 5.2f;
             if (brightnessShift <= 20) {
                 darkening = false;
             }
         } else {
-            saturationShift += 50.2f;
-            brightnessShift += 50.2f;
+            saturationShift += 5.2f;
+            brightnessShift += 5.2f;
             if (brightnessShift >= 100) {
                 darkening = true;
                 baseHue = (baseHue + 20) % 360;
